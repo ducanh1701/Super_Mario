@@ -1,0 +1,17 @@
+
+                                                                                          
+                                                                                    o o o
+                                                  1                                o o o o
+                                                 III                              o o o o o
+                                    o o o         o         o o o               o o o o o o
+                                   IIIIIII       III        IIIIIII              o o o o o 
+                            1      o o o o       o         o o o o o      1    IIIIIII o o
+                           III                   I                        III
+                            o    2   1   2      III    2    1    2       o
+                           III    I  III  I      o     I   III   I      III
+                            o    IIIIIIIIIII           IIIIIIIIIII       o
+                EF               o o o o o o o       o o o o o o o             EF
+                CD              IIIIIIIIIIIIII      IIIIIIIIIIIIII              CD
+        EF      AB      1       o o o o o o o       o o o o o o o      1      AB      EF
+        CD                      IIIIIIIIIIIIII      IIIIIIIIIIIIII              CD       
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB*
