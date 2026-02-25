@@ -183,7 +183,6 @@ public class GameEngine extends GameCore
         gameStartTime = System.currentTimeMillis();
         gameState = STATE_PLAYING;
         
-        // Start background music
         soundManager.playBackgroundMusic("background.wav");
     }
     
@@ -207,21 +206,42 @@ public class GameEngine extends GameCore
             g.setColor(Color.WHITE);
             g.drawString("Home: "+mapLoader.currentMap,700.0f,20.0f);
             
-            // Display game timer
             elapsedSeconds = (System.currentTimeMillis() - gameStartTime) / 1000;
             int minutes = (int)(elapsedSeconds / 60);
             int seconds = (int)(elapsedSeconds % 60);
-            g.setColor(Color.CYAN);
-            g.drawString("Time: " + minutes + ":" + String.format("%02d", seconds), 10.0f, 50.0f);
+                g.setColor(Color.CYAN);
+                g.drawString("Time: " + minutes + ":" + String.format("%02d", seconds), 10.0f, 50.0f);
+
+                try {
+                    Sprite playerSprite = map.getPlayer();
+                    int mapWidth = TileMapDrawer.tilesToPixels(map.getWidth());
+
+                    int offsetX = screen.getWidth() / 2 - Math.round(playerSprite.getX()) - 64;
+                    offsetX = Math.min(offsetX, 0);
+                    offsetX = Math.max(offsetX, screen.getWidth() - mapWidth);
+
+                    int offsetY = screen.getHeight() - TileMapDrawer.tilesToPixels(map.getHeight());
+
+                    int px = Math.round(playerSprite.getX()) + offsetX;
+                    int py = Math.round(playerSprite.getY()) + offsetY;
+
+                    g.setFont(new Font("Arial", Font.BOLD, 18));
+                    g.setColor(Color.WHITE);
+                    String nameLabel = playerName;
+                    FontMetrics nfm = g.getFontMetrics();
+                    int nameX = px + (playerSprite.getWidth() / 2) - (nfm.stringWidth(nameLabel) / 2);
+                    int nameY = py - 8; 
+                    g.drawString(nameLabel, nameX, nameY);
+                } catch (Exception ex) {
+
+                }
         }
     }
     
     private void drawMenu(Graphics2D g) {
-        // Draw semi-transparent background
         g.setColor(new Color(0, 0, 0, 200));
         g.fillRect(0, 0, screen.getWidth(), screen.getHeight());
         
-        // Draw menu title
         g.setFont(new Font("Arial", Font.BOLD, 72));
         g.setColor(Color.YELLOW);
         String title = "SUPER MARIO";
@@ -229,7 +249,6 @@ public class GameEngine extends GameCore
         int titleX = (screen.getWidth() - fm.stringWidth(title)) / 2;
         g.drawString(title, titleX, 150);
         
-        // Draw start button
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.setColor(Color.CYAN);
         String startText = "Press ENTER to START";
@@ -237,7 +256,6 @@ public class GameEngine extends GameCore
         int startX = (screen.getWidth() - fm.stringWidth(startText)) / 2;
         g.drawString(startText, startX, 300);
         
-        // Draw instructions
         g.setFont(new Font("Arial", Font.PLAIN, 24));
         g.setColor(Color.WHITE);
         String[] instructions = {
@@ -259,7 +277,6 @@ public class GameEngine extends GameCore
         g.setColor(new Color(0, 0, 0, 220));
         g.fillRect(0, 0, screen.getWidth(), screen.getHeight());
         
-        // Draw title
         g.setFont(new Font("Arial", Font.BOLD, 64));
         g.setColor(Color.YELLOW);
         String title = "Enter Your Name";
@@ -267,7 +284,6 @@ public class GameEngine extends GameCore
         int titleX = (screen.getWidth() - fm.stringWidth(title)) / 2;
         g.drawString(title, titleX, 150);
         
-        // Draw input field with text
         g.setFont(new Font("Arial", Font.PLAIN, 48));
         g.setColor(Color.WHITE);
         String inputDisplay = nameInput.toString() + (System.currentTimeMillis() % 1000 < 500 ? "_" : "");
@@ -275,7 +291,6 @@ public class GameEngine extends GameCore
         int inputX = (screen.getWidth() - fm.stringWidth(inputDisplay)) / 2;
         g.drawString(inputDisplay, inputX, 300);
         
-        // Draw instructions
         g.setFont(new Font("Arial", Font.PLAIN, 32));
         g.setColor(Color.CYAN);
         String instruction = "Press ENTER to Continue";
@@ -285,11 +300,9 @@ public class GameEngine extends GameCore
     }
     
     private void drawGameOverScreen(Graphics2D g) {
-        // Draw semi-transparent background
         g.setColor(new Color(0, 0, 0, 220));
         g.fillRect(0, 0, screen.getWidth(), screen.getHeight());
         
-        // Draw game over title
         g.setFont(new Font("Arial", Font.BOLD, 56));
         g.setColor(new Color(255, 0, 0));
         String title = "GAME OVER";
@@ -297,7 +310,6 @@ public class GameEngine extends GameCore
         int titleX = (screen.getWidth() - fm.stringWidth(title)) / 2;
         g.drawString(title, titleX, 120);
         
-        // Draw player name below game over
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.setColor(Color.WHITE);
         String nameDisplay = playerName;
@@ -305,7 +317,6 @@ public class GameEngine extends GameCore
         int nameX = (screen.getWidth() - fm.stringWidth(nameDisplay)) / 2;
         g.drawString(nameDisplay, nameX, 180);
         
-        // Draw loss message
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.setColor(Color.CYAN);
         String message = "You Lost!";
@@ -313,11 +324,9 @@ public class GameEngine extends GameCore
         int messageX = (screen.getWidth() - fm.stringWidth(message)) / 2;
         g.drawString(message, messageX, 270);
         
-        // Draw stats
         g.setFont(new Font("Arial", Font.BOLD, 32));
         g.setColor(Color.WHITE);
         
-        // Calculate total time (use gameOverTime which was captured when player lost all lives)
         long totalElapsedSeconds = (gameOverTime - gameStartTime) / 1000;
         int minutes = (int)(totalElapsedSeconds / 60);
         int seconds = (int)(totalElapsedSeconds % 60);
@@ -336,7 +345,6 @@ public class GameEngine extends GameCore
             statsY += 40;
         }
         
-        // Draw restart instruction
         g.setFont(new Font("Arial", Font.PLAIN, 24));
         g.setColor(Color.YELLOW);
         String restartText = "Press ENTER to Return to Menu";
@@ -346,11 +354,9 @@ public class GameEngine extends GameCore
     }
     
     private void drawVictoryScreen(Graphics2D g) {
-        // Draw semi-transparent background
         g.setColor(new Color(0, 0, 0, 220));
         g.fillRect(0, 0, screen.getWidth(), screen.getHeight());
         
-        // Draw victory title
         g.setFont(new Font("Arial", Font.BOLD, 56));
         g.setColor(Color.YELLOW);
         String title = "CONGRATULATIONS";
@@ -358,7 +364,6 @@ public class GameEngine extends GameCore
         int titleX = (screen.getWidth() - fm.stringWidth(title)) / 2;
         g.drawString(title, titleX, 120);
         
-        // Draw player name below congratulations
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.setColor(Color.CYAN);
         String nameDisplay = playerName + "!";
@@ -366,7 +371,6 @@ public class GameEngine extends GameCore
         int nameX = (screen.getWidth() - fm.stringWidth(nameDisplay)) / 2;
         g.drawString(nameDisplay, nameX, 180);
         
-        // Draw victory message
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.setColor(Color.CYAN);
         String message = "You Have Won!";
@@ -374,11 +378,9 @@ public class GameEngine extends GameCore
         int messageX = (screen.getWidth() - fm.stringWidth(message)) / 2;
         g.drawString(message, messageX, 270);
         
-        // Draw stats
         g.setFont(new Font("Arial", Font.BOLD, 32));
         g.setColor(Color.WHITE);
         
-        // Calculate total time (use finalGameTime which was frozen when game was won)
         long totalElapsedSeconds = (finalGameTime - gameStartTime) / 1000;
         int minutes = (int)(totalElapsedSeconds / 60);
         int seconds = (int)(totalElapsedSeconds % 60);
@@ -397,7 +399,6 @@ public class GameEngine extends GameCore
             statsY += 60;
         }
         
-        // Draw restart instruction
         g.setFont(new Font("Arial", Font.PLAIN, 24));
         g.setColor(Color.YELLOW);
         String restartText = "Press ENTER to return to Menu or ESC to Exit";
@@ -406,19 +407,11 @@ public class GameEngine extends GameCore
         g.drawString(restartText, restartX, 600);
     }
     
-    
-    /**
-     * Gets the current map.
-     */
     public TileMap getMap() {
         return map;
     }
     
-    /**
-     * Gets the tile that a Sprites collides with. Only the
-     * Sprite's X or Y should be changed, not both. Returns null
-     * if no collision is detected.
-     */
+    
     public Point getTileCollision(Sprite sprite, float newX, float newY) 
     {
         if (map == null) {
@@ -430,7 +423,6 @@ public class GameEngine extends GameCore
         float toX = Math.max(sprite.getX(), newX);
         float toY = Math.max(sprite.getY(), newY);
         
-        // get the tile locations
         int fromTileX = TileMapDrawer.pixelsToTiles(fromX);
         int fromTileY = TileMapDrawer.pixelsToTiles(fromY);
         int toTileX = TileMapDrawer.pixelsToTiles(
@@ -438,19 +430,16 @@ public class GameEngine extends GameCore
         int toTileY = TileMapDrawer.pixelsToTiles(
                 toY + sprite.getHeight() - 1);
         
-        // check each tile for a collision
         for (int x=fromTileX; x<=toTileX; x++) {
             for (int y=fromTileY; y<=toTileY; y++) {
                 if (x < 0 || x >= map.getWidth() ||
                         map.getTile(x, y) != null) {
-                    // collision found, return the tile
                     pointCache.setLocation(x, y);
                     return pointCache;
                 }
             }
         }
         
-        // no collision found
         return null;
     }
     
@@ -676,11 +665,9 @@ public class GameEngine extends GameCore
      * from the map.
      */
     public void acquirePowerUp(PowerUp powerUp) {
-        // remove it from the map
         map.removeSprite(powerUp);
         
         if (powerUp instanceof PowerUp.Star) {
-            // do something here, like give the player points
             collectedStars++;
             if(collectedStars==100) 
             {
@@ -689,14 +676,11 @@ public class GameEngine extends GameCore
             }
             
         } else if (powerUp instanceof PowerUp.Music) {
-            // change the music
             
         } else if (powerUp instanceof PowerUp.Goal) {
-            // advance to next map
             numLives += 2;
             map = mapLoader.loadNextMap();
             
-            // Check if player has won (no more maps to load = completed all 5 maps)
             if (map == null) {
                 finalGameTime = System.currentTimeMillis();
                 gameState = STATE_WIN_GAME;
